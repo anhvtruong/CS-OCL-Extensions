@@ -1,0 +1,10 @@
+C:\Users\tvanh\OneDrive\Documents\Studium\Forschung\projects\OclExtensions\bin\Debug\netcoreapp3.1\OclExtensions.deps.json
+C:\Users\tvanh\OneDrive\Documents\Studium\Forschung\projects\OclExtensions\bin\Debug\netcoreapp3.1\OclExtensions.dll
+C:\Users\tvanh\OneDrive\Documents\Studium\Forschung\projects\OclExtensions\bin\Debug\netcoreapp3.1\OclExtensions.pdb
+C:\Users\tvanh\OneDrive\Documents\Studium\Forschung\projects\OclExtensions\obj\Debug\netcoreapp3.1\OclExtensions.AssemblyInfoInputs.cache
+C:\Users\tvanh\OneDrive\Documents\Studium\Forschung\projects\OclExtensions\obj\Debug\netcoreapp3.1\OclExtensions.AssemblyInfo.cs
+C:\Users\tvanh\OneDrive\Documents\Studium\Forschung\projects\OclExtensions\obj\Debug\netcoreapp3.1\OclExtensions.dll
+C:\Users\tvanh\OneDrive\Documents\Studium\Forschung\projects\OclExtensions\obj\Debug\netcoreapp3.1\OclExtensions.pdb
+C:\Users\tvanh\OneDrive\Documents\Studium\Forschung\projects\OclExtensions\bin\Debug\netcoreapp3.1\OclExtensions.exe
+C:\Users\tvanh\OneDrive\Documents\Studium\Forschung\projects\OclExtensions\bin\Debug\netcoreapp3.1\OclExtensions.runtimeconfig.json
+C:\Users\tvanh\OneDrive\Documents\Studium\Forschung\projects\OclExtensions\bin\Debug\netcoreapp3.1\OclExtensions.runtimeconfig.dev.json
