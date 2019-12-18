@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Text;
 using System.Linq;
+using System.Collections.Concurrent;
 
 namespace OclExtensions
 {
@@ -62,22 +62,46 @@ namespace OclExtensions
                     count++;
             return count;
         }
-        public static bool IncludesAll<T>(this List<T> list, List<T> list2)
+        public static bool IncludesAll<T>(this List<T> list, IEnumerable<T> collection)
         {
-            foreach (var e2 in list2)
+            foreach (var e2 in collection)
                 if (!list.Contains(e2))
                     return false;
             return true;
         }
-        public static bool ExcludesAll<T>(this List<T> list, List<T> list2)
+        public static bool ExcludesAll<T>(this List<T> list, IEnumerable<T> collection)
         {
-            foreach (var e2 in list2)
+            foreach (var e2 in collection)
                 if (list.Contains(e2))
                     return false;
             return true;
         }
         public static bool IsEmpty<T>(this List<T> list) => list.Count == 0;
         public static bool NotEmpty<T>(this List<T> list) => list.Count > 0;
+        public static List<T> SubSequence<T>(this List<T> list, int i1, int i2) => list.GetRange(i1, i2 - i1);
+        public static T At<T>(this List<T> list, int i) => list[i];
+        public static List<T> Including<T>(this List<T> list, T obj)
+        {
+            List<T> result = new List<T>(list)
+            {
+                obj
+            };
+            return result;
+        }
+        public static List<T> Excluding<T>(this List<T> list, T obj)
+        {
+            List<T> result = new List<T>(list);
+            result.Remove(obj);
+            return result;
+        }
+        public static List<T> Reject<T>(this List<T> list, Predicate<T> e)
+        {
+            List<T> result = new List<T>(list);
+            result.RemoveAll(e);
+            return result;
+        }
+        public static List<T> UnionOcl<T>(this List<T> list, IEnumerable<T> collection) => new List<T>(list.Union(collection));
+        public static ConcurrentBag<T> AsBag<T>(this List<T> list) => new ConcurrentBag<T>(list);
 
         // Not finished yet
         public static bool IsUnique<T>(this List<T> list, T obj)
@@ -88,6 +112,110 @@ namespace OclExtensions
         {
             return list;
         }
+        #endregion
+
+        #region Set Extension Methods
+        public static int Size<T>(this HashSet<T> st) => st.Count;
+        public static bool IsEmpty<T>(this HashSet<T> st) => st.Count == 0;
+        public static bool NotEmpty<T>(this HashSet<T> st) => st.Count > 0;
+        public static bool Excludes<T>(this HashSet<T> st, T obj) => !st.Contains(obj);
+        public static int Count<T>(this HashSet<T> st, T obj)
+        {
+            int count = 0;
+            foreach (T e in st)
+                if (e.Equals(obj))
+                    count++;
+            return count;
+        }
+        public static bool IncludesAll<T>(this HashSet<T> st, IEnumerable<T> collection)
+        {
+            foreach (var e2 in collection)
+                if (!st.Contains(e2))
+                    return false;
+            return true;
+        }
+        public static bool ExcludesAll<T>(this HashSet<T> st, IEnumerable<T> collection)
+        {
+            foreach (var e2 in collection)
+                if (st.Contains(e2))
+                    return false;
+            return true;
+        }
+        public static HashSet<T> Including<T>(this HashSet<T> st, T obj)
+        {
+            HashSet<T> result = new HashSet<T>(st)
+            {
+                obj
+            };
+            return result;
+        }
+        public static HashSet<T> Excluding<T>(this HashSet<T> st, T obj)
+        {
+            HashSet<T> result = new HashSet<T>(st);
+            result.Remove(obj);
+            return result;
+        }
+        public static HashSet<T> Reject<T>(this HashSet<T> st, Predicate<T> e)
+        {
+            HashSet<T> result = new HashSet<T>(st);
+            result.RemoveWhere(e);
+            return result;
+        }
+        public static HashSet<T> UnionOcl<T>(this HashSet<T> st, IEnumerable<T> collection) => new HashSet<T>(st.Union(collection));
+        public static HashSet<T> Intersection<T>(this HashSet<T> st, IEnumerable<T> collection) => new HashSet<T>(st.Intersect(collection));
+        public static ConcurrentBag<T> AsBag<T>(this HashSet<T> st) => new ConcurrentBag<T>(st);
+        #endregion
+
+        #region Bag Extension Methods
+        public static int Size<T>(this ConcurrentBag<T> bg) => bg.Count;
+        public static bool IsEmpty<T>(this ConcurrentBag<T> bg) => bg.Count == 0;
+        public static bool NotEmpty<T>(this ConcurrentBag<T> bg) => bg.Count > 0;
+        public static bool Excludes<T>(this ConcurrentBag<T> bg, T obj) => !bg.Contains(obj);
+        public static bool IncludesAll<T>(this ConcurrentBag<T> bg, IEnumerable<T> collection)
+        {
+            foreach (var e2 in collection)
+                if (!bg.Contains(e2))
+                    return false;
+            return true;
+        }
+        public static bool ExcludesAll<T>(this ConcurrentBag<T> bg, IEnumerable<T> collection)
+        {
+            foreach (var e2 in collection)
+                if (bg.Contains(e2))
+                    return false;
+            return true;
+        }
+        public static int Count<T>(this ConcurrentBag<T> bg, T obj)
+        {
+            int count = 0;
+            foreach (T e in bg)
+                if (e.Equals(obj))
+                    count++;
+            return count;
+        }
+        public static ConcurrentBag<T> Including<T>(this ConcurrentBag<T> bg, T obj)
+        {
+            ConcurrentBag<T> result = new ConcurrentBag<T>(bg)
+            {
+                obj
+            };
+            return result;
+        }
+        public static ConcurrentBag<T> Excluding<T>(this ConcurrentBag<T> bg, T obj)
+        {
+            ConcurrentBag<T> result = new ConcurrentBag<T>();
+            while (bg.TryTake(out T temp))
+            {
+                if (temp.Equals(obj))
+                    continue;
+                else
+                    result.Add(temp);
+            }
+            return result;
+        }
+        public static ConcurrentBag<T> UnionOcl<T>(this ConcurrentBag<T> bg, IEnumerable<T> collection) => new ConcurrentBag<T>(bg.Union(collection));
+        public static ConcurrentBag<T> Intersection<T>(this ConcurrentBag<T> bg, IEnumerable<T> collection) => new ConcurrentBag<T>(bg.Intersect(collection));
+
         #endregion
     }
 }
