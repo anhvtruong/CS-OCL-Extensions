@@ -100,9 +100,23 @@ namespace OclExtensions
             result.RemoveAll(e);
             return result;
         }
+        public static List<T> SelectOcl<T>(this List<T> list, Predicate<T> match)
+        {
+            List<T> result = new List<T>();
+            foreach (var e in list)
+                if (match(e))
+                    result.Add(e);
+            return result;
+        }
         public static List<T> UnionOcl<T>(this List<T> list, IEnumerable<T> collection) => new List<T>(list.Union(collection));
         public static ConcurrentBag<T> AsBag<T>(this List<T> list) => new ConcurrentBag<T>(list);
-
+        public static void Println<T>(this List<T> list)
+        {
+            foreach (var e in list)
+            {
+                Console.WriteLine(e);
+            }
+        }
         // Not finished yet
         public static bool IsUnique<T>(this List<T> list, T obj)
         {
@@ -155,15 +169,44 @@ namespace OclExtensions
             result.Remove(obj);
             return result;
         }
+        public static bool TrueForAll<T>(this HashSet<T> st, Predicate<T> match)
+        {
+            foreach (var e in st)
+                if (!match(e))
+                    return false;
+            return true;
+        }
+        public static bool Exists<T>(this HashSet<T> st, Predicate<T> match)
+        {
+            foreach (var e in st)
+                if (match(e))
+                    return true;
+            return false;
+        }
         public static HashSet<T> Reject<T>(this HashSet<T> st, Predicate<T> e)
         {
             HashSet<T> result = new HashSet<T>(st);
             result.RemoveWhere(e);
             return result;
         }
+        public static HashSet<T> SelectOcl<T>(this HashSet<T> st, Predicate<T> match)
+        {
+            HashSet<T> result = new HashSet<T>();
+            foreach (var e in st)
+                if (match(e))
+                    result.Add(e);
+            return result;
+        }
         public static HashSet<T> UnionOcl<T>(this HashSet<T> st, IEnumerable<T> collection) => new HashSet<T>(st.Union(collection));
         public static HashSet<T> Intersection<T>(this HashSet<T> st, IEnumerable<T> collection) => new HashSet<T>(st.Intersect(collection));
         public static ConcurrentBag<T> AsBag<T>(this HashSet<T> st) => new ConcurrentBag<T>(st);
+        public static void Println<T>(this HashSet<T> st)
+        {
+            foreach (var e in st)
+            {
+                Console.WriteLine(e);
+            }
+        }
         #endregion
 
         #region Bag Extension Methods
@@ -204,13 +247,54 @@ namespace OclExtensions
         public static ConcurrentBag<T> Excluding<T>(this ConcurrentBag<T> bg, T obj)
         {
             ConcurrentBag<T> result = new ConcurrentBag<T>();
-            while (bg.TryTake(out T temp))
+            foreach (var e in bg)
             {
-                if (temp.Equals(obj))
+                if (e.Equals(obj))
                     continue;
                 else
-                    result.Add(temp);
+                    result.Add(e);
             }
+            return result;
+        }
+        public static bool TrueForAll<T>(this ConcurrentBag<T> bg, Predicate<T> match)
+        {
+            foreach (var e in bg)
+                if (!match(e))
+                    return false;
+            return true;
+        }
+        public static bool Exists<T>(this ConcurrentBag<T> bg, Predicate<T> match)
+        {
+            foreach (var e in bg)
+                if (match(e))
+                    return true;
+            return false;
+        }
+        public static ConcurrentBag<T> Reject<T>(this ConcurrentBag<T> bg, Predicate<T> match)
+        {
+            ConcurrentBag<T> result = new ConcurrentBag<T>();
+            foreach (var e in bg)
+            {
+                if (match(e))
+                    continue;
+                else
+                    result.Add(e);
+            }
+            return result;
+        }
+        public static void Println<T>(this ConcurrentBag<T> bg)
+        {
+            foreach (var e in bg)
+            {
+                Console.WriteLine(e);
+            }
+        }
+        public static ConcurrentBag<T> SelectOcl<T>(this ConcurrentBag<T> bg, Predicate<T> match)
+        {
+            ConcurrentBag<T> result = new ConcurrentBag<T>();
+            foreach (var e in bg)
+                if (match(e))
+                    result.Add(e);
             return result;
         }
         public static ConcurrentBag<T> UnionOcl<T>(this ConcurrentBag<T> bg, IEnumerable<T> collection) => new ConcurrentBag<T>(bg.Union(collection));

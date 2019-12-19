@@ -11,7 +11,7 @@ namespace OclExtensions
         {
             string s = "42,12";
             List<int> list = new List<int>() { 4, 4, 5, 61, 1};
-            List<int> list2 = new List<int>() { 1, 4, 5, 1 };
+            List<int> list2 = new List<int>() { 1, 4, 5, 1, 8 };
             HashSet<int> set = new HashSet<int>(list);
             HashSet<int> set2 = new HashSet<int>(list2);
             ConcurrentBag<int> bag = new ConcurrentBag<int>(list2);
@@ -20,7 +20,9 @@ namespace OclExtensions
             Console.WriteLine("Hello Extension Methods!");
             Console.WriteLine(list.IncludesAll(list2));
             Console.WriteLine(list.NotEmpty());
-            Console.WriteLine(s.ToReal());
+            var temp = list.SelectOcl(e => e > 4);
+            Console.WriteLine(temp.Count);
+            temp.Println();
         }
     }
 }
